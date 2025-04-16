@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SRM Welkin ATL Inventory Management System - Add new items to the inventory">
+    <meta name="author" content="Areeb">
+    <meta name="keywords" content="ATL, SRM Welkin, add items, inventory management">
+    <title>Add Items - SRM Welkin ATL Inventory System</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: rgb(255, 166, 0);
+            color: rgb(0, 0, 0);
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        header a { 
+            margin: 10px; 
+            text-align: center;
+            color: rgb(0, 0, 0); 
+            text-decoration: overline; 
+            display: inline-block;
+        }
+        header a:hover{
+            text-decoration: underline;
+        }
+        .form-container {
+            margin-top: 40px;
+            background-color: rgb(96, 85, 69);
+            padding: 20px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.884);
+            color: white;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 95%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+        }
+        button {
+            background-color: rgb(255, 157, 0);
+            color: black;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: rgb(1, 0, 0);
+            color: rgb(255, 174, 0);
+        }
+        /* Popup Confirmation Styles */
+        .popup {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #e6ffee;
+            color: #2e7d32;
+            padding: 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeSlideDown 0.6s ease forwards;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+        .checkmark {
+            font-size: 50px;
+            margin-bottom: 10px;
+            animation: popUp 0.5s ease;
+        }
+        @keyframes fadeSlideDown {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -70%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+        @keyframes popUp {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9em;
+            padding: 20px;
+            background-color: rgb(49, 43, 31);
+            border-top: 2px solid rgb(255, 166, 0);
+            box-shadow: 0 -2px 10px rgba(255, 140, 0, 0.3);
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SRM Welkin ATL</h1>
+        <a href="/">Home</a>
+        <a href="/addstudents">Add Students</a>
+        <a href="/viewstudents">View Students</a>
+        <a href="/viewitems">View Items</a>
+        <a href="/assignitems">Assign Items</a>
+        <a href="/viewassignments">View Assignments</a>
+    </header>
+
+    <div class="form-container">
+        <h2>Add Item</h2>
+        <form method="POST" action="/additems" id="itemForm">
+            <label for="item_name">Item Name:</label>
+            <input type="text" id="item_name" name="item_name" placeholder="Enter item name" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+
+            <button type="submit">Add Item</button>
+        </form>
+    </div>
+
+    <!-- Popup Confirmation -->
+    <div class="popup" id="successPopup">
+        <div class="checkmark">✅</div>
+        <p>Item Added Successfully!</p>
+    </div>
+
+    <script>
+        const form = document.getElementById('itemForm');
+        const popup = document.getElementById('successPopup');
+    
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent normal form submission
+    
+            const formData = new FormData(form);
+    
+            fetch('/additems', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    popup.style.display = 'block'; // Show popup
+                    form.reset(); // Clear the form
+                    setTimeout(() => {
+                        popup.style.display = 'none'; // Hide popup after 3 seconds
+                    }, 3000);
+                } else {
+                    alert('Error adding item.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding item.');
+            });
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2023 SRM Welkin ATL Inventory Management System | Developed by Areeb</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SRM Welkin ATL Inventory Management System - Assign items to students">
+  <meta name="author" content="Areeb">
+  <meta name="keywords" content="ATL, SRM Welkin, assign items, inventory management, student assignments">
+  <title>Assign Items - SRM Welkin ATL Inventory System</title>
+  <style>
+    /* Your exact CSS - same */
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    header {
+      background-color: rgb(255, 166, 0);
+      color: rgb(0, 0, 0);
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    header a { 
+      margin: 10px; 
+      text-align: center;
+      color: rgb(0, 0, 0); 
+      text-decoration: overline; 
+      display: inline-block;
+    }
+    header a:hover{
+      text-decoration: underline;
+    }
+    .form-container {
+      background-color: rgb(60, 52, 42);
+      padding: 30px;
+      border-radius: 20px;
+      margin: 50px auto;
+      max-width: 800px;
+      box-shadow: 0 4px 8px rgba(255, 140, 0, 0.884);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+    input[type="text"], button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background-color: rgb(255, 157, 0);
+      color: black;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover {
+      background-color: rgb(1, 0, 0);
+      color: rgb(255, 174, 0);
+    }
+    .search-bar {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 25px;
+      background-color: rgb(77, 73, 66);
+      color: white;
+      font-size: 1em;
+      width: 100%;
+      border: 1px solid rgb(100, 90, 80);
+    }
+    .search-container {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    .search-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+    .table-container {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .table-container th, .table-container td {
+      padding: 12px;
+      text-align: left;
+    }
+    .table-container th {
+      background-color: rgb(255, 166, 0);
+      color: black;
+    }
+    .table-container tr:nth-child(even) {
+      background-color: rgb(50, 45, 40);
+    }
+    .table-container tr:nth-child(odd) {
+      background-color: rgb(60, 55, 50);
+    }
+    .table-container tr:hover {
+      background-color: rgb(255, 140, 0);
+    }
+    .table-container td {
+      color: white;
+    }
+    .selected-row {
+      background-color: rgb(255, 140, 0) !important;
+      font-weight: bold;
+    }
+    .popup {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #e6ffee;
+        color: #2e7d32;
+        padding: 20px 40px;
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        opacity: 0; /* IMPORTANT: start hidden */
+        animation: fadeIn 0.6s ease forwards;
+        z-index: 1000;
+    }
+    
+    .checkmark {
+        font-size: 50px;
+        margin-bottom: 10px;
+        animation: popUp 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, -30%);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+    
+    @keyframes popUp {
+        0% {
+            transform: scale(0);
+        }
+        60% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -30%);
+        }
+    }
+    
+    .nav-links {
+      margin-top: 10px;
+    }
+    
+    .nav-links a {
+      margin: 0 10px;
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    
+    .error-message {
+      color: #ff6b6b;
+      background-color: rgba(255, 107, 107, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    footer {
+        margin-top: 50px;
+        text-align: center;
+        color: #fff;
+        font-size: 0.9em;
+        padding: 20px;
+        background-color: rgb(49, 43, 31);
+        border-top: 2px solid rgb(255, 166, 0);
+        box-shadow: 0 -2px 10px rgba(255, 140, 0, 0.3);
+    }
+    
+    footer p {
+        margin: 5px 0;
+    }
+    
+    .assignment-info {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.1em;
+      background-color: rgb(70, 60, 50);
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+    
+    .assignment-info span {
+      font-weight: bold;
+      color: rgb(255, 166, 0);
+    }
+    
+    .tables-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .table-section {
+      background-color: rgb(50, 45, 40);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    .table-title {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      color: rgb(255, 166, 0);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Assign Items</h1>
+  <a href="/">Home</a>
+  <a href="/addstudents">Add Students</a>
+  <a href="/additems">Add Items</a>
+  <a href="/viewstudents">View Students</a>
+  <a href="/viewitems">View Items</a>
+  <a href="/assignitems">Assign Items</a>
+  <a href="/viewassignments">View Assignments</a>
+</header>
+
+<div class="form-container">
+  <form id="assign-form" method="POST" action="/assignitems">
+    <!-- Hidden input to store selected student and item IDs -->
+    <input type="hidden" id="selected-student-id" name="student">
+    <input type="hidden" id="selected-item-id" name="item">
+    <div id="error-message" class="error-message">Please select both a student and an item first.</div>
+    
+    <div id="assignment-info" class="assignment-info">
+      You are about to assign <span id="selected-item-name">no item</span> to <span id="selected-student-name">no student</span>
+    </div>
+
+    <div class="tables-container">
+      <div class="table-section">
+        <div class="table-title">Select a Student</div>
+        <!-- Search bar for students -->
+        <div class="search-container">
+          <input type="text" id="search-bar" class="search-bar" placeholder="Type to search students..." onkeyup="filterStudents()">
+          <span class="search-icon">🔍</span>
+        </div>
+
+        <!-- Students Table -->
+        <table class="table-container" id="students-table">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Student Name</th>
+              <th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in students %}
+            <tr onclick="selectStudent(this)" data-student-id="{{ student.id }}" data-student-name="{{ student.name }}">
+              <td>{{ student.id }}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.student_class }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="table-section">
+        <div class="table-title">Select an Item</div>
+        <!-- Search bar for items -->
+        <div class="search-container">
+          <input type="text" id="search-bar-items" class="search-bar" placeholder="Type to search items..." onkeyup="filterItems()">
+          <span class="search-icon">🔍</span>
+        </div>
+
+        <!-- Items Table -->
+        <table class="table-container" id="items-table">
+          <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+            <tr onclick="selectItem(this)" data-item-id="{{ item.id }}" data-item-name="{{ item.item_name }}">
+              <td>{{ item.id }}</td>
+              <td>{{ item.item_name }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <button type="button" onclick="validateAndSubmit()">Assign Item</button>
+  </form>
+</div>
+
+{% if success %}
+    <div class="popup" id="success-popup">
+        <div class="checkmark">✓</div>
+        <p>Item assigned successfully!</p>
+    </div>
+    <script>
+        setTimeout(function() {
+            var popup = document.getElementById('success-popup');
+            if (popup) {
+                // Add the fadeOut animation
+                popup.style.animation = 'fadeOut 0.6s ease forwards'; 
+                
+                // Hide the popup after it fades out
+                setTimeout(function() {
+                    popup.style.display = 'none';
+                }, 600); // Match the duration of the fadeOut animation
+            }
+        }, 3000); // Show for 3 seconds
+    </script>
+{% endif %}
+
+<footer>
+  <p>&copy; 2023 SRM Welkin ATL Inventory Management System | Developed by Areeb</p>
+</footer>
+
+<script>
+  let selectedStudentRow = null;
+  let selectedItemRow = null;
+
+  // Function to select student
+  function selectStudent(row) {
+    if (selectedStudentRow) {
+      selectedStudentRow.classList.remove('selected-row');
+    }
+    selectedStudentRow = row;
+    selectedStudentRow.classList.add('selected-row');
+    const studentId = row.getAttribute('data-student-id');
+    const studentName = row.getAttribute('data-student-name');
+    document.getElementById('selected-student-id').value = studentId;
+    document.getElementById('selected-student-name').textContent = studentName;
+    document.getElementById('error-message').style.display = 'none';
+    updateAssignmentInfo();
+  }
+
+  // Function to select item
+  function selectItem(row) {
+    if (selectedItemRow) {
+      selectedItemRow.classList.remove('selected-row');
+    }
+    selectedItemRow = row;
+    selectedItemRow.classList.add('selected-row');
+    const itemId = row.getAttribute('data-item-id');
+    const itemName = row.getAttribute('data-item-name');
+    document.getElementById('selected-item-id').value = itemId;
+    document.getElementById('selected-item-name').textContent = itemName;
+    document.getElementById('error-message').style.display = 'none';
+    updateAssignmentInfo();
+  }
+  
+  function updateAssignmentInfo() {
+    const studentName = document.getElementById('selected-student-name').textContent;
+    const itemName = document.getElementById('selected-item-name').textContent;
+    
+    if (studentName !== 'no student' && itemName !== 'no item') {
+      document.getElementById('assignment-info').style.display = 'block';
+    }
+  }
+
+  // Function to filter students
+  function filterStudents() {
+    const input = document.getElementById("search-bar");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("students-table");
+    const trs = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < trs.length; i++) { // Start from 1 to skip table header
+      const tds = trs[i].getElementsByTagName("td");
+      if (tds.length > 0) {
+        const id = tds[0].textContent || tds[0].innerText;
+        const name = tds[1].textContent || tds[1].innerText;
+        const className = tds[2].textContent || tds[2].innerText;
+        if (name.toLowerCase().indexOf(filter) > -1 || 
+            id.indexOf(filter) > -1 || 
+            className.toLowerCase().indexOf(filter) > -1) {
+          trs[i].style.display = "";
+        } else {
+          trs[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+  // Function to filter items
+  function filterItems() {
+    const input = document.getElementById("search-bar-items");
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById("items-table");
+    const trs = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < trs.length; i++) { // Start from 1 to skip table header
+      const tds = trs[i].getElementsByTagName("td");
+      if (tds.length > 0) {
+        const id = tds[0].textContent || tds[0].innerText;
+        const name = tds[1].textContent || tds[1].innerText;
+        if (name.toLowerCase().indexOf(filter) > -1 || id.indexOf(filter) > -1) {
+          trs[i].style.display = "";
+        } else {
+          trs[i].style.display = "none";
+        }
+      }
+    }
+  }
+  
+  // Function to validate form before submission
+  function validateAndSubmit() {
+    const studentId = document.getElementById('selected-student-id').value;
+    const itemId = document.getElementById('selected-item-id').value;
+    const errorMessage = document.getElementById('error-message');
+    
+    if (!studentId || !itemId) {
+      errorMessage.style.display = 'block';
+      return false;
+    }
+    
+    document.getElementById('assign-form').submit();
+  }
+</script>
+
+</body>
+</html>

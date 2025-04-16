@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SRM Welkin ATL Inventory Management System - Track and manage equipment and student assignments">
+    <meta name="author" content="Areeb">
+    <meta name="keywords" content="ATL, SRM Welkin, inventory management, student tracking, equipment management">
+    <title>SRM Welkin ATL - Inventory Management System</title>
+    <style>
+        body{
+            background-color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header{
+            background-color: rgb(255, 166, 0);
+            color: rgb(0, 0, 0);
+            padding: 20px;
+            text-align: center;
+            margin-top: 0px;
+        }
+        h1{
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .menu-container {
+            margin-top: 60px;
+            background-color: rgb(96, 85, 69);
+            padding: 20px;
+            border-radius: 60px;
+            width: 90%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.884);
+        }
+     
+        .menu-item { 
+            margin: 15px auto; 
+            text-align: center;
+            padding: 15px; 
+            background: rgb(255, 157, 0); 
+            color: rgb(0, 0, 0); 
+            text-decoration: none; 
+            border-radius: 100px;
+            display: block;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover{
+            background: rgb(1, 0, 0);
+            color: rgb(255, 174, 0);
+            transform: scale(1.05);
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9em;
+            padding: 20px;
+            background-color: rgb(49, 43, 31);
+            border-top: 2px solid rgb(255, 166, 0);
+            box-shadow: 0 -2px 10px rgba(255, 140, 0, 0.3);
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SRM Welkin ATL</h1>
+        <div class="subtitle">Inventory Management System</div>
+    </header>
+    
+    <div class="menu-container">
+        <a href="/addstudents" class="menu-item">Add Students</a>
+        <a href="/additems" class="menu-item">Add Items</a>
+        <a href="/viewstudents" class="menu-item">View Students</a>
+        <a href="/viewitems" class="menu-item">View Items</a>
+        <a href="/assignitems" class="menu-item">Assign Items</a>
+        <a href="/viewassignments" class="menu-item">View Assignments</a>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 SRM Welkin ATL - Inventory Management System</p>
+        <p>Developed by Areeb</p>
+    </footer>
+</body>
+</html>

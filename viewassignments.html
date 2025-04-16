@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SRM Welkin ATL Inventory Management System - View and manage all item assignments">
+    <meta name="author" content="Areeb">
+    <meta name="keywords" content="ATL, SRM Welkin, inventory, assignments, management system">
+    <title>View Assignments - SRM Welkin ATL Inventory System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+        header {
+            background-color: rgb(255, 166, 0);
+            color: rgb(0, 0, 0);
+            padding: 20px;
+            text-align: center;
+            margin-top: 0px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #ffbf00;
+            margin-top: 30px;
+        }
+        header a { 
+            margin: 10px; 
+            text-align: center;
+            color: rgb(0, 0, 0); 
+            text-decoration: overline; 
+            display: inline-block;
+        }
+        header a:hover{
+            text-decoration: underline;
+        }
+        .search-container {
+            width: 80%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+        .search-input {
+            padding: 10px;
+            width: 60%;
+            border-radius: 25px;
+            border: none;
+            background-color: #3a3a3a;
+            color: white;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(254, 140, 0, 0.358);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #49493f;
+            color: white;
+        }
+        tr {
+            background-color: #f28a0b97;
+        }
+        tr:hover {
+            background-color: #ffa200;
+        }
+        button {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e60000;
+        }
+        .empty-message {
+            text-align: center;
+            color: #ffbf00;
+            margin-top: 30px;
+            font-style: italic;
+        }
+        .summary {
+            color: white;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 80%;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9em;
+            padding: 20px;
+            background-color: rgb(49, 43, 31);
+            border-top: 2px solid rgb(255, 166, 0);
+            box-shadow: 0 -2px 10px rgba(255, 140, 0, 0.3);
+        }
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SRM Welkin ATL</h1>
+        <a href="/">Home</a>
+        <a href="/addstudents">Add Students</a>
+        <a href="/additems">Add Items</a>
+        <a href="/viewstudents">View Students</a>
+        <a href="/viewitems">View Items</a>
+        <a href="/assignitems">Assign Items</a>
+        <a href="/viewassignments">View Assignments</a>
+    </header>
+
+    <h2>Current Assignments</h2>
+    
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by student or item..." onkeyup="searchAssignments()">
+    </div>
+
+    <table id="assignmentsTable">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Class</th>
+                <th>Item Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for assignment in assignments %}
+            <tr>
+                <td>{{ assignment.student_name }}</td>
+                <td>{{ assignment.student_class }}</td>
+                <td>{{ assignment.item_name }}</td>
+                <td>
+                    <form method="POST" action="/unassign_item/{{ assignment.assignment_id }}">
+                        <button type="submit">Return Item</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            
+            {% if not assignments %}
+            <tr>
+                <td colspan="4" class="empty-message">No assignments found. Assign some items first!</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    
+    <div class="summary">
+        <p>Total assignments: <span id="assignmentCount">{{ assignments|length }}</span></p>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 SRM Welkin ATL Inventory Management System | Developed by Areeb</p>
+    </footer>
+    
+    <script>
+        function searchAssignments() {
+            // Get input value and convert to lowercase
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toLowerCase();
+            
+            // Get table and rows
+            var table = document.getElementById("assignmentsTable");
+            var rows = table.getElementsByTagName("tr");
+            
+            // Loop through rows (start at index 1 to skip header)
+            var count = 0;
+            
+            for (var i = 1; i < rows.length; i++) {
+                // Skip the empty message row if present
+                if (rows[i].cells.length === 1 && rows[i].cells[0].classList.contains("empty-message")) {
+                    continue;
+                }
+                
+                // Get cells with student name and item name
+                var studentCell = rows[i].getElementsByTagName("td")[0];
+                var itemCell = rows[i].getElementsByTagName("td")[2];
+                
+                if (studentCell && itemCell) {
+                    // Get text content of cells
+                    var studentName = studentCell.textContent || studentCell.innerText;
+                    var itemName = itemCell.textContent || itemCell.innerText;
+                    
+                    // If student name or item name contains the filter text
+                    if (studentName.toLowerCase().indexOf(filter) > -1 || itemName.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                        count++;
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+            
+            // Update the count of displayed assignments
+            document.getElementById("assignmentCount").textContent = count;
+        }
+    </script>
+</body>
+</html> 

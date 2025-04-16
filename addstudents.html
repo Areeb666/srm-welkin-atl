@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SRM Welkin ATL Inventory Management System - Add new students to the database">
+    <meta name="author" content="Areeb">
+    <meta name="keywords" content="ATL, SRM Welkin, add students, inventory system">
+    <title>Add Students - SRM Welkin ATL Inventory System</title>
+    <style>
+        body {
+            background-color: rgb(0, 0, 0);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+        header {
+            background-color: rgb(255, 166, 0);
+            color: rgb(0, 0, 0);
+            padding: 20px;
+            text-align: center;
+            margin-top: 0px;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            margin-bottom: 20px;
+        }
+        header a { 
+            margin: 10px; 
+            text-align: center;
+            color: rgb(0, 0, 0); 
+            text-decoration: overline; 
+            display: inline-block;
+        }
+        header a:hover{
+            text-decoration: underline;
+        }
+        
+        .form-container {
+            background-color: #322f2f; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgb(255, 196, 0); 
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #ffd700; 
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cccccc; 
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444444;
+            color: white;
+        }
+
+        input::placeholder {
+            color: #bbbbbb;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ffd700; 
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #000000; 
+            color: #ffd700;  
+        }
+        
+        .popup {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #e6ffee;
+            color: #2e7d32;
+            padding: 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeSlideDown 0.6s ease forwards;
+            z-index: 1000;
+        }
+
+        .checkmark {
+            font-size: 50px;
+            margin-bottom: 10px;
+            animation: popUp 0.5s ease;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -30%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @keyframes popUp {
+            0% {
+                transform: scale(0);
+            }
+            60% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.9em;
+            padding: 20px;
+            background-color: rgb(49, 43, 31);
+            border-top: 2px solid rgb(255, 166, 0);
+            box-shadow: 0 -2px 10px rgba(255, 140, 0, 0.3);
+        }
+        
+        footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Add Students</h1>
+        <a href="/">Home</a>
+        <a href="/additems">Add Items</a>
+        <a href="/viewstudents">View Students</a>
+        <a href="/viewitems">View Items</a>
+        <a href="/assignitems">Assign Items</a>
+        <a href="/viewassignments">View Assignments</a>
+    </header>
+    
+    {% if success %}
+    <div class="popup" id="success-popup">
+        <div class="checkmark">✓</div>
+        <p>Student added successfully!</p>
+    </div>
+    {% endif %}
+    
+    <div class="form-container">
+        <h2>Enter Student Details</h2>
+        <form method="POST" action="/submit_student">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter name" required>
+        
+            <label for="class">Class:</label>
+            <input type="text" id="class" name="class" placeholder="Enter class" required>
+        
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter phone number" required>
+        
+            <button type="submit">Add Student</button>
+        </form>
+    </div>
+      
+    {% if success %}
+    <script>
+        setTimeout(() => {
+            const popup = document.getElementById('success-popup');
+            if (popup) {
+                popup.style.animation = 'fadeSlideDown reverse 0.6s ease forwards';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 600);
+            }
+        }, 2000);
+    </script>
+    {% endif %}
+    
+    <footer>
+        <p>&copy; 2023 SRM Welkin ATL Inventory Management System | Developed by Areeb</p>
+    </footer>
+</body>
+</html>
