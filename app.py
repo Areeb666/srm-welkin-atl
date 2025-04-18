@@ -276,6 +276,40 @@ def unassign_item(assignment_id):
     
     return redirect('/viewassignments')
 
+# Routes for editing items and students
+@app.route('/edit_item', methods=['POST'])
+def edit_item():
+    if request.method == 'POST':
+        item_id = request.form['item_id']
+        item_name = request.form['item_name']
+        quantity = request.form['quantity']
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE items SET item_name = ?, quantity = ? WHERE id = ?", 
+                     (item_name, quantity, item_id))
+        conn.commit()
+        conn.close()
+        
+        return redirect('/viewitems')
+
+@app.route('/edit_student', methods=['POST'])
+def edit_student():
+    if request.method == 'POST':
+        student_id = request.form['student_id']
+        name = request.form['name']
+        student_class = request.form['class']
+        phone = request.form['phone']
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE students SET name = ?, student_class = ?, phone = ? WHERE id = ?", 
+                     (name, student_class, phone, student_id))
+        conn.commit()
+        conn.close()
+        
+        return redirect('/viewstudents')
+
 if __name__ == '__main__':
     init_db()
     # Set debug mode based on environment
