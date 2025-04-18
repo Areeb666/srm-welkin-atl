@@ -119,6 +119,89 @@
         footer p {
             margin: 5px 0;
         }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .edit-btn {
+            background-color: #0099cc;
+        }
+        
+        .edit-btn:hover {
+            background-color: #0077aa;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .modal-content {
+            background-color: #322f2f;
+            color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgb(255, 196, 0);
+            width: 50%;
+            max-width: 500px;
+        }
+        
+        .modal-content h3 {
+            color: #ffd700;
+            text-align: center;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: white;
+        }
+        
+        .modal-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        
+        .modal-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #444444;
+            color: white;
+        }
+        
+        .modal-form button {
+            background-color: #ffd700;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .modal-form button:hover {
+            background-color: #000000;
+            color: #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -154,7 +237,8 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.student_class }}</td>
                 <td>{{ student.phone }}</td>
-                <td>
+                <td class="action-buttons">
+                    <button class="edit-btn" onclick="openEditModal('{{ student.id }}', '{{ student.name }}', '{{ student.student_class }}', '{{ student.phone }}')">Edit</button>
                     <form method="POST" action="/delete_student/{{ student.id }}">
                         <button type="submit">Remove</button>
                     </form>
@@ -177,6 +261,28 @@
     <footer>
         <p>&copy; 2023 SRM Welkin ATL Inventory Management System | Developed by Areeb</p>
     </footer>
+    
+    <!-- Edit Student Modal -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h3>Edit Student</h3>
+            <form class="modal-form" id="editStudentForm" method="POST" action="/edit_student">
+                <input type="hidden" id="edit_student_id" name="student_id">
+                
+                <label for="edit_name">Name:</label>
+                <input type="text" id="edit_name" name="name" required>
+                
+                <label for="edit_class">Class:</label>
+                <input type="text" id="edit_class" name="class" required>
+                
+                <label for="edit_phone">Phone:</label>
+                <input type="text" id="edit_phone" name="phone" required>
+                
+                <button type="submit">Update Student</button>
+            </form>
+        </div>
+    </div>
     
     <script>
         function searchStudents() {
@@ -221,6 +327,27 @@
             
             // Update displayed count
             document.getElementById("displayed-count").textContent = displayCount;
+        }
+        
+        // Edit modal functions
+        function openEditModal(studentId, name, studentClass, phone) {
+            document.getElementById('edit_student_id').value = studentId;
+            document.getElementById('edit_name').value = name;
+            document.getElementById('edit_class').value = studentClass;
+            document.getElementById('edit_phone').value = phone;
+            document.getElementById('editStudentModal').style.display = 'block';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editStudentModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            var modal = document.getElementById('editStudentModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
         }
     </script>
 </body>
